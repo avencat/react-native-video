@@ -1184,7 +1184,22 @@ For more detailed info check this [article](https://cocoacasts.com/how-to-add-ap
 
 At some point in the future, react-native-video will include an Audio Manager for configuring how videos mix with other apps playing sounds on the device for Android also.
 
-On iOS, if you would like to allow other apps to play music over your video component, please see:
+On iOS, if you would like to allow other apps to play music over your video component, make the following changes:
+
+**AppDelegate.m**
+
+```objective-c
+#import <AVFoundation/AVFoundation.h>  // import
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+  ...
+  [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];  // allow
+  ...
+}
+```
+
+And use these props:
 * [audioMode](#audiomode)
 * [audioRecording](#audiorecording)
 * [ignoreSilentSwitch](#ignoresilentswitch)
