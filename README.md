@@ -256,7 +256,9 @@ var styles = StyleSheet.create({
 
 ### Configurable props
 * [allowsExternalPlayback](#allowsexternalplayback)
+* [audioMode](#audiomode)
 * [audioOnly](#audioonly)
+* [audioRecording](#audiorecording)
 * [bufferConfig](#bufferconfig)
 * [controls](#controls)
 * [filter](#filter)
@@ -324,6 +326,15 @@ Indicates whether the player allows switching to external playback mode such as 
 
 Platforms: iOS
 
+#### audioMode
+Controls the iOS silent switch behavior
+* **"inherit" (default)** - Use the default AVPlayer behavior
+* **"duckOthers"** - Lower the volume of other apps
+* **"exclusive"** - Interrupts audio from other sources (this is the default behavior unless you set other one on your AppDelegate.m)
+* **"mix"** - Allow other apps to play at the same time as our app. iOS only
+
+Platforms: iOS
+
 #### audioOnly
 Indicates whether the player should only play the audio track and instead of displaying the video track, show the poster instead.
 * **false (default)** - Display the video as normal
@@ -332,6 +343,15 @@ Indicates whether the player should only play the audio track and instead of dis
 For this to work, the poster prop must be set.
 
 Platforms: all
+
+#### audioRecording
+Allow audio recording. iOS only
+* **"false" (default)** - Don't authorize recording audio
+* **"true"** - Authorize recording audio
+
+If this is set to `true`, [ignoreSilentSwitch](#ignoresilentswitch) prop will be ignored.
+
+Platforms: iOS
 
 #### bufferConfig
 Adjust the buffer settings. This prop takes an object with one or more of the properties listed below.
@@ -1162,25 +1182,12 @@ For more detailed info check this [article](https://cocoacasts.com/how-to-add-ap
 
 ### Audio Mixing
 
-At some point in the future, react-native-video will include an Audio Manager for configuring how videos mix with other apps playing sounds on the device.
+At some point in the future, react-native-video will include an Audio Manager for configuring how videos mix with other apps playing sounds on the device for Android also.
 
-On iOS, if you would like to allow other apps to play music over your video component, make the following change:
-
-**AppDelegate.m**
-
-```objective-c
-#import <AVFoundation/AVFoundation.h>  // import
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-  ...
-  [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];  // allow
-  ...
-}
-```
-
-You can also use the [ignoreSilentSwitch](ignoresilentswitch) prop.
-</details>
+On iOS, if you would like to allow other apps to play music over your video component, please see:
+* [audioMode](#audiomode)
+* [audioRecording](#audiorecording)
+* [ignoreSilentSwitch](#ignoresilentswitch)
 
 ### Android Expansion File Usage
 Expansions files allow you to ship assets that exceed the 100MB apk size limit and don't need to be updated each time you push an app update.
