@@ -109,7 +109,7 @@ static int const RCTVideoUnset = -1;
     _playWhenInactive = false;
     _pictureInPicture = false;
     _ignoreSilentSwitch = @"inherit"; // inherit, ignore, obey
-    _audioRecording = false;
+    _audioRecording = NO;
     _audioMode = @"inherit"; // inherit, exclusive, mix, duckOthers
 #if TARGET_OS_IOS
     _restoreUserInterfaceForPIPStopCompletionHandler = NULL;
@@ -869,7 +869,7 @@ static int const RCTVideoUnset = -1;
   [self applyModifiers];
 }
 
-- (void)setAudioRecording:(NSString *)audioRecording
+- (void)setAudioRecording:(BOOL)audioRecording
 {
   _audioRecording = audioRecording;
   [self applyModifiers];
@@ -899,7 +899,7 @@ static int const RCTVideoUnset = -1;
       category = AVAudioSessionCategoryAmbient;
     }
 
-    if (_audioRecording) {
+    if (_audioRecording == YES) {
       category = AVAudioSessionCategoryPlayAndRecord;
     }
 
