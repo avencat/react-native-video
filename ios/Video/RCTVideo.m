@@ -883,7 +883,7 @@ static int const RCTVideoUnset = -1;
   } else {
     AVAudioSessionCategory initialCategory = [[AVAudioSession sharedInstance] category];
     AVAudioSessionCategory category = initialCategory;
-    AVAudioSessionCategoryOptions options = NULL;
+    AVAudioSessionCategoryOptions options = nil;
 
     if ([_audioMode isEqualToString:@"mix"]) {
       options = AVAudioSessionCategoryOptionMixWithOthers;
@@ -903,7 +903,7 @@ static int const RCTVideoUnset = -1;
       category = AVAudioSessionCategoryPlayAndRecord;
     }
 
-    if (options != NULL || category != initialCategory) {
+    if (options != nil || category != initialCategory) {
       [[AVAudioSession sharedInstance] setCategory:category withOptions:options error:nil];
     }
     [_player play];
