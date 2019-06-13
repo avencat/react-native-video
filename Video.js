@@ -426,6 +426,8 @@ Video.propTypes = {
   pictureInPicture: PropTypes.bool,
   playInBackground: PropTypes.bool,
   playWhenInactive: PropTypes.bool,
+  audioMode: PropTypes.oneOf(['exclusive', 'mix', 'duckOthers']),
+  audioRecording: PropTypes.bool,
   ignoreSilentSwitch: PropTypes.oneOf(['ignore', 'obey']),
   reportBandwidth: PropTypes.bool,
   disableFocus: PropTypes.bool,

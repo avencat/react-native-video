@@ -65,6 +65,8 @@ static int const RCTVideoUnset = -1;
   BOOL _playInBackground;
   BOOL _playWhenInactive;
   BOOL _pictureInPicture;
+  NSString * _audioMode;
+  BOOL _audioRecording;
   NSString * _ignoreSilentSwitch;
   NSString * _resizeMode;
   BOOL _fullscreen;
@@ -106,6 +108,8 @@ static int const RCTVideoUnset = -1;
     _allowsExternalPlayback = YES;
     _playWhenInactive = false;
     _pictureInPicture = false;
+    _audioMode = @"inherit"; // inherit, exclusive, mix, duckOthers
+    _audioRecording = false;
     _ignoreSilentSwitch = @"inherit"; // inherit, ignore, obey
 #if TARGET_OS_IOS
     _restoreUserInterfaceForPIPStopCompletionHandler = NULL;
@@ -859,16 +863,48 @@ static int const RCTVideoUnset = -1;
   [self applyModifiers];
 }
 
+- (void)setAudioCategory:(BOOL)audioCategory
+{
+  _audioCategory = audioCategory;
+  [self applyModifiers];
+}
+
+- (void)setAudioMode:(NSString *)audioMode
+{
+  _audioMode = audioMode;
+  [self applyModifiers];
+}
+
 - (void)setPaused:(BOOL)paused
 {
   if (paused) {
     [_player pause];
     [_player setRate:0.0];
   } else {
-    if([_ignoreSilentSwitch isEqualToString:@"ignore"]) {
-      [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-    } else if([_ignoreSilentSwitch isEqualToString:@"obey"]) {
-      [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];
+    initialCategory = [[AVAudioSession sharedInstance] category]
+    category = initialCategory;
+    options = NULL;
+
+    if ([_audioMode isEqualToString:@"mix"]) {
+      options = AVAudioSessionCategoryOptionMixWithOthers;
+    } else if ([_audioMode isEqualToString:@"duckOthers"]) {
+      options = AVAudioSessionCategoryOptionDuckOthers;
+    } else if ([_audioMode isEqualToString:@"exclusive"]) {
+      category = AVAudioSessionCategorySoloAmbient ;
+    }
+
+    if ([_ignoreSilentSwitch isEqualToString:@"ignore"]) {
+      category = AVAudioSessionCategoryPlayback;
+    } else if ([_ignoreSilentSwitch isEqualToString:@"obey"]) {
+      category = AVAudioSessionCategoryAmbient;
+    }
+
+    if (_audioRecording == true) {
+      category = AVAudioSessionCategoryPlayAndRecord;
+    }
+
+    if (category != initialCategory || options != NULL) {
+      [[AVAudioSession sharedInstance] setCategory:category withOptions:options error:nil];
     }
     [_player play];
     [_player setRate:_rate];

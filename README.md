@@ -256,7 +256,9 @@ var styles = StyleSheet.create({
 
 ### Configurable props
 * [allowsExternalPlayback](#allowsexternalplayback)
+* [audioMode](#audiomode)
 * [audioOnly](#audioonly)
+* [audioRecording](#audiorecording)
 * [bufferConfig](#bufferconfig)
 * [controls](#controls)
 * [filter](#filter)
@@ -324,6 +326,15 @@ Indicates whether the player allows switching to external playback mode such as 
 
 Platforms: iOS
 
+#### audioMode
+Controls the iOS external audio input behavior according [#1103](https://github.com/react-native-community/react-native-video/issues/1103)
+* **"inherit" (default)** - Use the default AVPlayer behavior
+* **"exclusive"** - Interrupts audio from other sources
+* **"mix"** - Allow other apps to play at the same time as our app
+* **"duck"** - Lower the volume of other apps
+
+Platforms: iOS
+
 #### audioOnly
 Indicates whether the player should only play the audio track and instead of displaying the video track, show the poster instead.
 * **false (default)** - Display the video as normal
@@ -332,6 +343,13 @@ Indicates whether the player should only play the audio track and instead of dis
 For this to work, the poster prop must be set.
 
 Platforms: all
+
+#### audioRecording
+Indicates whether the app authorize audio recording on iOS according [#1103](https://github.com/react-native-community/react-native-video/issues/1103)
+* **"false" (default)** - Don't authorize audio recording
+* **"true"** - Authorize audio recording
+
+Platforms: iOS
 
 #### bufferConfig
 Adjust the buffer settings. This prop takes an object with one or more of the properties listed below.
@@ -1179,7 +1197,7 @@ On iOS, if you would like to allow other apps to play music over your video comp
 }
 ```
 
-You can also use the [ignoreSilentSwitch](ignoresilentswitch) prop.
+You can also use the [ignoreSilentSwitch](#ignoresilentswitch) prop.
 </details>
 
 ### Android Expansion File Usage
