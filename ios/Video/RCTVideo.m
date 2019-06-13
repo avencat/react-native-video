@@ -878,6 +878,7 @@ static int const RCTVideoUnset = -1;
 - (void)setPaused:(BOOL)paused
 {
   if (paused) {
+    [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
     [_player pause];
     [_player setRate:0.0];
   } else {
@@ -903,6 +904,9 @@ static int const RCTVideoUnset = -1;
       category = AVAudioSessionCategoryPlayAndRecord;
     }
 
+    if (!_muted) {
+      [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    }
     if (options != nil || category != initialCategory) {
       [[AVAudioSession sharedInstance] setCategory:category withOptions:options error:nil];
     }
